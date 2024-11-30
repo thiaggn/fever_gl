@@ -1,27 +1,31 @@
-#include <iostream>
 #include <ogl/opengl.h>
-#include <vector>
+
+float vertices[] = {
+        -0.5f, -0.5f, 0.0f,
+        0.5f, -0.5f, 0.0f,
+        0.0f, 0.5f, 0.0f,
+};
 
 int main() {
-    ogl::context gl = ogl::Init();
+    ogl::context gl = ogl::init();
+    ogl::vertex_shader vshader("../assets/vertex.glsl");
+    ogl::frag_shader fshader("../assets/frag.glsl");
 
-    std::vector<float> vertices = {
-            -0.5f, -0.5f, 0.0f,
-            0.5f, -0.5f, 0.0f,
-            0.0f, 0.5f, 0.0f,
-    };
+    ogl::shader_program sp;
+    sp.add(vshader);
+    sp.add(fshader);
+    sp.build();
+    sp.use();
 
-    ogl::vertex_buffer vbo(ogl::static_draw, vertices);
+    ogl::set_clear_color(0.2f, 0.3f, 0.45f);
 
-    ogl::SetClearColor(0.2f, 0.3f, 0.45f);
-    while (gl.ShouldContinue()) {
+    while (gl.should_continue()) {
+        ogl::clear(ogl::color_buffer);
 
-        ogl::Clear(ogl::color_buffer);
-
-        gl.PollEvents();
-        gl.SwapBuffers();
+        gl.poll_events();
+        gl.swap_buffers();
     }
 
-    ogl::Terminate();
+    ogl::terminate();
     return 0;
 }

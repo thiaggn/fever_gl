@@ -2,7 +2,7 @@
 
 namespace util {
     struct file {
-        char* bytes;
+        char *bytes;
         long size;
 
         explicit file(const char *name);

@@ -12,6 +12,13 @@ add_executable(fever_gl
 
 target_include_directories(fever_gl PUBLIC "src")
 
+set_target_properties(fever_gl
+        PROPERTIES
+        ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/build"
+        LIBRARY_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/build"
+        RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/build"
+)
+
 # --------------------- dependencies ---------------------
 add_subdirectory("deps/glfw-3.4")
 target_link_libraries(fever_gl glfw)
