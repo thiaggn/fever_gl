@@ -5,9 +5,11 @@ set(CMAKE_CXX_STANDARD 17)
 
 # ----------------------- fever_gl -----------------------
 add_executable(fever_gl
-        "src/main.cc"
-        "src/ogl/opengl.cc"
-        "src/util/file.cc"
+        src/main.cc
+        src/util/file.cc
+        src/gl/opengl.h
+        src/gl/opengl.cc
+        src/panic/gl.h
 )
 
 target_include_directories(fever_gl PUBLIC "src")

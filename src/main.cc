@@ -1,31 +1,51 @@
-#include <ogl/opengl.h>
+#include <gl/opengl.h>
 
 float vertices[] = {
-        -0.5f, -0.5f, 0.0f,
-        0.5f, -0.5f, 0.0f,
-        0.0f, 0.5f, 0.0f,
+        0.5f, 0.5f, 0.0f,  // top right
+        0.5f, -0.5f, 0.0f, // bottom right
+        -0.5f, -0.5f, 0.0f,// bottom left
+        -0.5f, 0.5f, 0.0f  // top left
+};
+unsigned int indices[] = {
+        // note that we start from 0!
+        0, 1, 3,// first Triangle
+        1, 2, 3 // second Triangle
 };
 
 int main() {
-    ogl::context gl = ogl::init();
-    ogl::vertex_shader vshader("../assets/vertex.glsl");
-    ogl::frag_shader fshader("../assets/frag.glsl");
+    gl::window window = gl::new_window(800, 500, "Fever");
 
-    ogl::shader_program sp;
-    sp.add(vshader);
-    sp.add(fshader);
-    sp.build();
-    sp.use();
+    gl::program prog;
+    prog.attach(gl::e_vertex_shader, "../assets/vertex.glsl");
+    prog.attach(gl::e_fragmt_shader, "../assets/frag.glsl");
+    prog.link();
 
-    ogl::set_clear_color(0.2f, 0.3f, 0.45f);
+    gl::vertex_array vao;
+    vao.bind();
 
-    while (gl.should_continue()) {
-        ogl::clear(ogl::color_buffer);
+    gl::buffer vbo(gl::e_vertex_buffer);
+    vbo.write(sizeof(vertices), vertices, gl::e_static_draw);
 
-        gl.poll_events();
-        gl.swap_buffers();
+    gl::buffer ebo(gl::e_element_buffer);
+    ebo.write(sizeof(indices), indices,  gl::e_static_draw);
+
+    vao.set_attribute(0, 3, gl::e_float);
+    vao.wrap();
+
+    gl::set_clear_color(0.2f, 0.3f, 0.3f, 1.0f);
+
+    while (!window.should_close()) {
+        gl::clear(gl::c_color_buffer);
+
+        prog.use();
+        vao.bind();
+
+        gl::draw_elements(gl::e_triangles, 6, gl::e_uint, 0);
+
+
+        window.swap_buffers();
+        window.poll_events();
     }
 
-    ogl::terminate();
     return 0;
 }
