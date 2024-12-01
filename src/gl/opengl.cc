@@ -11,7 +11,7 @@ static std::map<gl::data_type, int> type_to_size_map = {
 
 // ==-==-== window array ==-==--==-==-==-==-==-==
 
-struct gl::window gl::new_window(int width, int height, const char *title) {
+struct gl::window gl::newWindow(int width, int height, const char *title) {
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
@@ -38,15 +38,15 @@ struct gl::window gl::new_window(int width, int height, const char *title) {
     return window;
 }
 
-int gl::window::should_close() const {
+int gl::window::shouldClose() const {
     return glfwWindowShouldClose(this->handle);
 }
 
-void gl::window::poll_events() {
+void gl::window::pollEvents() {
     glfwPollEvents();
 }
 
-void gl::window::swap_buffers() const {
+void gl::window::swapBuffers() const {
     glfwSwapBuffers(this->handle);
 }
 
@@ -97,15 +97,15 @@ void gl::program::use() const {
 
 // ==-==-== vertex array ==-==--==-==-==-==-==-==
 
-gl::vertex_array::vertex_array() : handle(0), m_offset(0) {
+gl::vertexArray::vertexArray() : handle(0), m_offset(0) {
     glGenVertexArrays(1, &(this->handle));
 }
 
-void gl::vertex_array::bind() const {
+void gl::vertexArray::bind() const {
     glBindVertexArray(this->handle);
 }
 
-void gl::vertex_array::set_attribute(int location, int length, data_type type) {
+void gl::vertexArray::setAttribute(int location, int length, data_type type) {
     int total_size = length * type_to_size_map[type];
     void* offset = reinterpret_cast<void*>(this->m_offset);
 
@@ -113,8 +113,8 @@ void gl::vertex_array::set_attribute(int location, int length, data_type type) {
     glEnableVertexAttribArray(location);
     this->m_offset += total_size;
 }
-void gl::vertex_array::wrap() const {
-    glBindBuffer(gl::buffer_type::e_vertex_buffer, 0);
+void gl::vertexArray::wrap() const {
+    glBindBuffer(gl::buffer_type::e_vertexBuffer, 0);
     glBindVertexArray(0);
 }
 
@@ -138,7 +138,7 @@ void gl::buffer::write(std::vector<T> data, gl::buffer_usage usage) {
 
 // ==-==-== functions ==-==--==-==-==-==-==-==
 
-void gl::set_clear_color(float r, float g, float b, float a) {
+void gl::setClearColor(float r, float g, float b, float a) {
     glClearColor(r, g, b, a);
 }
 
@@ -146,6 +146,6 @@ void gl::clear(GLuint mask) {
     glClear(mask);
 }
 
-void gl::draw_elements(draw_mode mode, int count, data_type type, int indices) {
+void gl::drawElements(draw_mode mode, int count, data_type type, int indices) {
     glDrawElements(mode, count, type, reinterpret_cast<void*>(indices));
 }

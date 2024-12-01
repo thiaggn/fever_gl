@@ -13,38 +13,37 @@ unsigned int indices[] = {
 };
 
 int main() {
-    gl::window window = gl::new_window(800, 500, "Fever");
+    gl::window window = gl::newWindow(800, 500, "Fever");
 
     gl::program prog;
-    prog.attach(gl::e_vertex_shader, "../assets/vertex.glsl");
-    prog.attach(gl::e_fragmt_shader, "../assets/frag.glsl");
+    prog.attach(gl::e_vertexShader, "../assets/vertex.glsl");
+    prog.attach(gl::e_fragShader, "../assets/frag.glsl");
     prog.link();
 
-    gl::vertex_array vao;
+    gl::vertexArray vao;
     vao.bind();
 
-    gl::buffer vbo(gl::e_vertex_buffer);
+    gl::buffer vbo(gl::e_vertexBuffer);
     vbo.write(sizeof(vertices), vertices, gl::e_static_draw);
 
-    gl::buffer ebo(gl::e_element_buffer);
+    gl::buffer ebo(gl::e_elementBuffer);
     ebo.write(sizeof(indices), indices,  gl::e_static_draw);
 
-    vao.set_attribute(0, 3, gl::e_float);
+    vao.setAttribute(0, 3, gl::e_float);
     vao.wrap();
 
-    gl::set_clear_color(0.2f, 0.3f, 0.3f, 1.0f);
+    gl::setClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
-    while (!window.should_close()) {
-        gl::clear(gl::c_color_buffer);
+    while (!window.shouldClose()) {
+        gl::clear(gl::c_colorBuffer);
 
         prog.use();
         vao.bind();
 
-        gl::draw_elements(gl::e_triangles, 6, gl::e_uint, 0);
+        gl::drawElements(gl::e_triangles, 6, gl::e_uint, 0);
 
-
-        window.swap_buffers();
-        window.poll_events();
+        window.swapBuffers();
+        window.pollEvents();
     }
 
     return 0;
