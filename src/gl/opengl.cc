@@ -3,11 +3,10 @@
 #include <util/file.h>
 #include <map>
 
-static std::map<gl::data_type, int> type_to_size_map = {
-        {gl::data_type::e_float, static_cast<int>(sizeof(float))},
-        {gl::data_type::e_uint, static_cast<int>(sizeof(unsigned int))}
+static std::map<gl::dataType, int> type_to_size_map = {
+        {gl::dataType::e_float, static_cast<int>(sizeof(float))},
+        {gl::dataType::e_uint, static_cast<int>(sizeof(unsigned int))}
 };
-
 
 // ==-==-== window array ==-==--==-==-==-==-==-==
 
@@ -56,7 +55,7 @@ gl::program::program() {
     this->handle = glCreateProgram();
 }
 
-void gl::program::attach(gl::shader_type t, const char *path) {
+void gl::program::attach(shaderType t, const char *path) {
     util::file source(path);
 
     unsigned int sh_handle = glCreateShader(t);
@@ -105,7 +104,7 @@ void gl::vertexArray::bind() const {
     glBindVertexArray(this->handle);
 }
 
-void gl::vertexArray::setAttribute(int location, int length, data_type type) {
+void gl::vertexArray::setAttribute(int location, int length, dataType type) {
     int total_size = length * type_to_size_map[type];
     void* offset = reinterpret_cast<void*>(this->m_offset);
 
@@ -114,24 +113,24 @@ void gl::vertexArray::setAttribute(int location, int length, data_type type) {
     this->m_offset += total_size;
 }
 void gl::vertexArray::wrap() const {
-    glBindBuffer(gl::buffer_type::e_vertexBuffer, 0);
+    glBindBuffer(gl::bufferType::e_vertexBuffer, 0);
     glBindVertexArray(0);
 }
 
 // ==-==-== buffer ==-==--==-==-==-==-==-==-==-==
 
-gl::buffer::buffer(gl::buffer_type btype) : handle(0) {
+gl::buffer::buffer(gl::bufferType btype) : handle(0) {
     this->btype = btype;
     glGenBuffers(1, &this->handle);
 }
 
-void gl::buffer::write(GLsizeiptr size, void *data, gl::buffer_usage usage) const {
+void gl::buffer::write(GLsizeiptr size, void *data, gl::bufferUsage usage) const {
     glBindBuffer(btype, this->handle);     // Associa o buffer ao alvo
     glBufferData(btype, size, data, usage);// Usa o alvo (btype), não o handle
 }
 
 template<typename T>
-void gl::buffer::write(std::vector<T> data, gl::buffer_usage usage) {
+void gl::buffer::write(std::vector<T> data, gl::bufferUsage usage) {
     glBindBuffer(btype, this->handle);                               // Associa o buffer ao alvo
     glBufferData(btype, data.size() * sizeof(T), data.data(), usage);// Usa o alvo (btype)
 }
@@ -146,6 +145,6 @@ void gl::clear(GLuint mask) {
     glClear(mask);
 }
 
-void gl::drawElements(draw_mode mode, int count, data_type type, int indices) {
+void gl::drawElements(drawMode mode, int count, dataType type, int indices) {
     glDrawElements(mode, count, type, reinterpret_cast<void*>(indices));
 }

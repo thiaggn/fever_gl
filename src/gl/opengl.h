@@ -3,29 +3,27 @@
 #include <initializer_list>
 #include <vector>
 
-
-
 namespace gl {
-    enum shader_type {
+    enum shaderType {
         e_vertexShader = GL_VERTEX_SHADER,
         e_fragShader = GL_FRAGMENT_SHADER
     };
 
-    enum buffer_type {
+    enum bufferType {
         e_vertexBuffer = GL_ARRAY_BUFFER,
         e_elementBuffer = GL_ELEMENT_ARRAY_BUFFER,
     };
 
-    enum buffer_usage {
+    enum bufferUsage {
         e_static_draw = GL_STATIC_DRAW
     };
 
-    enum data_type {
+    enum dataType {
         e_float = GL_FLOAT,
         e_uint = GL_UNSIGNED_INT
     };
 
-    enum draw_mode {
+    enum drawMode {
         e_triangles = GL_TRIANGLES
     };
 
@@ -47,7 +45,7 @@ namespace gl {
         std::vector<unsigned int> sh_handles;
 
         program();
-        void attach(shader_type t, const char *path);
+        void attach(shaderType t, const char *path);
         void link() const;
         void use() const;
     };
@@ -62,18 +60,21 @@ namespace gl {
         vertexArray();
         void bind() const;
         void wrap() const;
-        void setAttribute(int location, int length, data_type type);
+        void setAttribute(int location, int length, dataType type);
     };
 
     struct buffer {
         unsigned int handle;
-        buffer_type btype;
+        bufferType btype;
 
-        explicit buffer(gl::buffer_type btype);
-        void write(GLsizeiptr size, void *data, gl::buffer_usage usage) const;
+        explicit buffer(bufferType btype);
+        void write(GLsizeiptr size, void *data, bufferUsage usage) const;
         template<typename T>
-        void write(std::vector<T> data, gl::buffer_usage usage);
+        void write(std::vector<T> data, gl::bufferUsage usage);
     };
+
+
+
 
 }
 
@@ -82,6 +83,6 @@ namespace gl {
     void setClearColor(float r, float g, float b, float a);
     void clear(GLuint mask);
 
-    void drawElements(draw_mode mode, int count, data_type type, int indices);
+    void drawElements(drawMode mode, int count, dataType type, int indices);
 
 }
